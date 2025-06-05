@@ -1,0 +1,26 @@
+services:
+    mysql:
+        image: mysql:8
+        container_name: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: formulaone
+            MYSQL_USER: userdb
+            MYSQL_PASSWORD: User.1234
+        ports:
+            - "6565:3306"
+        volumes:
+            - ./midatos:/var/lib/mysql
+
+    coche-api:
+        build: ./formula1api
+        container_name: coche-api
+        depends_on:
+            - mysql
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/formulaone
+            SPRING_DATASOURCE_USERNAME: root
+            SPRING_DATASOURCE_PASSWORD: 1234
+        ports:
+            - "8085:8081"
